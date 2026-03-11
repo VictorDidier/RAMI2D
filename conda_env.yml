@@ -1,0 +1,16 @@
+name: rami2d
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - pip=25.3
+  - python=3.11.13
+  - tifffile=2025.6.11
+  - conda-forge::ome-types=0.6.1
+  - scikit-image=0.25.2
+  - pandas=2.2.2
+  - conda-forge::matplotlib=3.10.8
+  - pip:
+    - "itk-elastix==0.23.0"
+    - "openslide-python==1.4.2"
+    - "openslide-bin==4.0.0.8"
