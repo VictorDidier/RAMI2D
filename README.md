@@ -1,3 +1,4 @@
+![Logo](https://github.com/VictorDidier/RAMI2D/blob/main/data/logo/logo2.png)
 # Description
 
 Robust Alignment of Multichannel Images in 2D is a CLI tool that allows the registration of two images, a fixed and a moving image, the moving image will be transformed to align with the fixed image and be saved as pyramidal .ome.tif.  The tool uses itk-elastix to offer 3 registration schemes that allow for more control on the final outcome, The tool also provides SIFT and RANSAC keypoint feature detection to be used for the estimation of an initial alignment when images are very missaligned or have different field of views.

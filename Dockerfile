@@ -21,7 +21,7 @@ ARG MAMBA_ROOT_PREFIX=/opt/conda
 ENV PATH $MAMBA_ROOT_PREFIX/bin:$PATH
 
 # Install dependencies with micromamba, clean afterwards
-RUN micromamba env create -f environment.yml \
+RUN micromamba env create -f conda_env.yml \
     && micromamba clean --all --yes
 
 # Add environment to PATH
