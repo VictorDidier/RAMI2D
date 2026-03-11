@@ -6,16 +6,16 @@ name: Docker
 # documentation.
 
 on:
-   push:
-      branches: [ "main" ]
+   #push:
+      #branches: [ "main" ]
    #release:
       #tags: ['*.*.*']
-   release: 
+   release:
       types: [published]
     #pull_request:
     #    branches: ["main"]
-    
-        
+
+
 #  schedule:
 #    - cron: '1 * * * *'
 #  push:
