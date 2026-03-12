@@ -73,7 +73,7 @@ def get_args():
 
     parser.add_argument('-mpp-key',
                         '--keypoints_microns_per_pixel',
-                        required=True,
+                        required=False,
                         type=float,
                         help="""
                         The fixed and moving images will be resized so their pixel size matches this value.
@@ -448,6 +448,21 @@ def validate_channel_args(args):
 
     return fix_ch,mov_ch
 
+def validate_align_args(args):
+    if args.initial_alignment:
+        if args.keypoints_microns_per_pixel:
+            pass
+        else:
+            raise ValueError("""Initial alignment (-a) was setup but no mpp-key argument was given.
+                             Please provide the image resolution (mpp-key )
+                             at which you want the keypoints to be searched.
+                             """
+                             )
+    else:
+        pass
+
+
+
 
 def main(version):
 
@@ -471,13 +486,13 @@ def main(version):
     apply_initial_alignment=args.initial_alignment
     grid_spacing=args.grid_spacing_um
     test_mode=args.test_mode
+    validate_align_args(args)
     #Define QC directories
     qc_dir= output_dir / "qc_reg"
     out_trf_dir=qc_dir / "transforms"
     #Create QC directories in local volume
     qc_dir.mkdir(parents=True,exist_ok=True)
     out_trf_dir.mkdir(parents=True,exist_ok=True)
-
 
     #Extract image properties,i.e. pyramidal, mpp,dimensions, etc.
     Fix=Image(fixed_img_path,mpp_fix)

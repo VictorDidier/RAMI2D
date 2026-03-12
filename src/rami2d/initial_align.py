@@ -46,6 +46,8 @@ def ransac_matches(src_coords,dst_coords):
                                         rng=1,
                                         stop_sample_num=10
                                         )
+
+
     #Limit number of ransac matches for displaying in the ransac_matches.png figure
     print("Number of keypoints validated by RANSAC:",np.sum(inliers))
     limit_no=20
