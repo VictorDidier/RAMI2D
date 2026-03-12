@@ -1,4 +1,4 @@
-![Logo](https://github.com/VictorDidier/RAMI2D/blob/main/data/logo/logo2.png)
+![Logo](https://github.com/VictorDidier/RAMI2D/blob/main/data/figs/logo2.png)
 # DESCRIPTION
 
 (RAMI2D) Robust Alignment of Multichannel Images in 2D is a command-line interface tool that allows the registration of multi-channel images in a convenient way by exposing the main parameters that control the registration outcome.  The flowchart below shows how the tool processes the images, this workflow is the usual footprint of a registration process and can be found in tools like [RegisterVirtualSlices](https://github.com/fiji/register_virtual_stack_slices) or [palom](https://github.com/labsyspharm/palom).
@@ -19,7 +19,7 @@ RAMI2D offers the following features:
 
 # WORKFLOW CHART
 
-
+![Logo](https://github.com/VictorDidier/RAMI2D/blob/main/data/figs/flowchart-horizontal-annotations.png)
 
 ## CLI arguments
 The main script is in ./src/rami2d/register.py.
