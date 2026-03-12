@@ -1,14 +1,25 @@
 ![Logo](https://github.com/VictorDidier/RAMI2D/blob/main/data/logo/logo2.png)
-# Description
+# DESCRIPTION
 
-Robust Alignment of Multichannel Images in 2D is a CLI tool that allows the registration of two images, a fixed and a moving image, the moving image will be transformed to align with the fixed image and be saved as pyramidal .ome.tif.  The tool uses itk-elastix to offer 3 registration schemes that allow for more control on the final outcome, The tool also provides SIFT and RANSAC keypoint feature detection to be used for the estimation of an initial alignment when images are very missaligned or have different field of views.
+(RAMI2D) Robust Alignment of Multichannel Images in 2D is a command-line interface tool that allows the registration of multi-channel images in a convenient way by exposing the main parameters that control the registration outcome.  The flowchart below shows how the tool processes the images, this workflow is the usual footprint of a registration process and can be found in tools like [RegisterVirtualSlices](https://github.com/fiji/register_virtual_stack_slices) or [palom](https://github.com/labsyspharm/palom).
 
-# Features
-The tool is robust in the following sense:
-- Can be used to register different image modalities. e.g H&E, Immuofluorescence, MALDI.
-- Can be used to register consecutive slices.
-- Fixed and moving images can have different pixel-sizes.
-- Multi-step registration scheme, Scheme 1: Rigid, Scheme 2: Rigid->Affine,Scheme 3: Rigid->Affine->Bsplines.
+The convenience that RAMI2D provides is an easy interface to use the power and features of [itk-elastix](https://github.com/InsightSoftwareConsortium/ITKElastix), i.e. registration models, sampling strategies and rendering registration results not only as an image but as a set of transformation parameters that can be saved in a file. RAMI2D packs some of the models found in [itk-elastix](https://github.com/InsightSoftwareConsortium/ITKElastix)  to offer 3 pre-defined registration schemes: 1) Rigid, 2) Rigid+Affine 3) Rigid+Affine+Bsplines, each of them providing more geometrical adaptability and thus more control in the final outcome.
+
+RAMI2D provides an option to find keypoints via SIFT and RANSAC for images that are initially very missaligned, e.g. rotated in large angles, images with different dimensions or different fields of view. These keypoints are later used to construct an itk transformation map that is ingested as an initial alignment to the pre-defined registration schemes.
+
+RAMI2D offers the following features:
+
+## Features
+- Supported formats: ome.tif,tif, any .ndpi
+- Multimodal registration: different microscopy modalities can be registered, whatever produces a grayscale or RGB image in the formats above
+- Registration of consecutive slices: Can be used to register consecutive slices.
+- Multi-scale: Fixed and moving images can have different pixel-sizes.
+- Multi-step registration scheme: Scheme-1) Rigid, Scheme-2) Rigid->Affine, Scheme Scheme-3)Rigid->Affine->Bsplines.
+- Test mode: check intermediate results in low-resolution before applying a result to a full-resolution image and all its channels.
+
+# WORKFLOW CHART
+
+
 
 ## CLI arguments
 The main script is in ./src/rami2d/register.py.
@@ -23,20 +34,13 @@ python register.py --help
 | -fix     | Path | output directory where the registered maldi & mics image will be saved | NA |
 | -mpp-fix | float | pixel-size in micrometers | NA |
 |-ifix | integer | 0-based index of channel to be used for registration|NA|
+
 ### Moving image arguments
 | Argument|Type|Description|Default value|
 |---------|----|-----------|-------------|
 | -mov     | Path | output directory where the registered maldi & mics image will be saved | NA |
 | -mpp-mov | float | pixel-size in micrometers | NA |
 |-imov | integer | 0-based index of channel to be used for registration|NA|
-### Registration arguments
-| Argument|Type|Description|Default value|
-|---------|----|-----------|-------------|
-| -a     | Boolean flag | Implement initial alignent via finding keypoints | NA |
-| -mpp-key | float | resolution in micrometers to be used for searching keypoints | NA |
-| -mpp-reg | float | resolution in micrometers to be used for implemnting the registration scheme | NA |
-| -rsc | integer | Select one of the following registration schemes 1,2,3,check the list in features section | 1 |
-| -gs | two integers | x y size of grid to be used in bsplines in micrometers (only useful for -rsc 3) | 1000 1000 |
 
 ### Registration arguments
 | Argument|Type|Description|Default value|
@@ -45,7 +49,7 @@ python register.py --help
 | -mpp-key | float | resolution in micrometers to be used for searching keypoints | NA |
 | -mpp-reg | float | resolution in micrometers to be used for implemnting the registration scheme | NA |
 | -rsc | integer | Select one of the following registration schemes 1,2,3,check the list in features section | 1 |
-| -gs | two integers | x y size of grid to be used in bsplines in micrometers  | 1000 1000 |
+| -gs | two integers | x y size of grid to be used in bsplines in micrometers (only useful for -rsc 3) | 1000 1000 |
 
 ### Output arguments
 | Argument|Type|Description|Default value|

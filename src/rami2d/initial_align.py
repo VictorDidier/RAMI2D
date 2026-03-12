@@ -13,6 +13,11 @@ from matplotlib.patches import Circle,ConnectionPatch
 import os
 from itertools import cycle
 
+
+def keep_first_n_true(bool_list, n=10):
+    true_indices = [i for i, val in enumerate(bool_list) if val][:n]
+    return [i in true_indices for i in range(len(bool_list))]
+
 def naive_descriptor_matching(fix_arr,mov_arr):
     imgs=[fix_arr,mov_arr]
     descriptor_extractor=SIFT(upsampling=1,n_scales=5)
@@ -41,8 +46,16 @@ def ransac_matches(src_coords,dst_coords):
                                         rng=1,
                                         stop_sample_num=10
                                         )
+    #Limit number of ransac matches for displaying in the ransac_matches.png figure
+    print("Number of keypoints validated by RANSAC:",np.sum(inliers))
+    limit_no=20
+    if np.sum(inliers)>limit_no:
+        print(f"Only {limit_no} will be displayed in the ransac_matches.png")
+        inliers_display=keep_first_n_true(inliers, n=limit_no)
+    else:
+        inliers_display=inliers
 
-    return model_robust, inliers
+    return model_robust, inliers,inliers_display
 
 def center_of_mass(point_cloud):
     M=len(point_cloud)
@@ -190,19 +203,25 @@ def estimate_transformation_parameters(fix_arr,mov_arr,output_ransac_matches=Fal
     keypoints,naive_matches=naive_descriptor_matching(fix_arr,mov_arr)
     fix_coords=keypoints[0][naive_matches[:,0]]
     mov_coords=keypoints[1][naive_matches[:,1]]
-    ETmodel,inliers=ransac_matches(fix_coords,mov_coords)
-
+    ETmodel,inliers,inliers_for_display=ransac_matches(fix_coords,mov_coords)
     matches_ransac=naive_matches[inliers]#indicex of matches validated by ransac algorithm
     theta=-ETmodel.rotation
+
+
+    if output_ransac_matches:
+        matches_ransac_display=naive_matches[inliers_for_display]
+        points_fix_display=keypoints[0][matches_ransac_display[:,0]]
+        points_mov_display=keypoints[1][matches_ransac_display[:,1]]
+        displayed_pairs=list(zip(points_fix_display,points_mov_display))
+        displayed_pairs.sort(key=lambda displayed_pairs: displayed_pairs[0][0])  # Sort by y-coordinate of fix points
+        points_fix_display, points_mov_display = zip(*displayed_pairs) # sorted keypoints
+        save_plot_ransac_matches(fix_arr, mov_arr, points_fix_display, points_mov_display,output_path=output_ransac_matches)
 
     final_points_fix=keypoints[0][matches_ransac[:,0]]
     final_points_mov=keypoints[1][matches_ransac[:,1]]
     pairs=list(zip(final_points_fix,final_points_mov))
     pairs.sort(key=lambda pair: pair[0][0])  # Sort by y-coordinate of fix points
     final_points_fix, final_points_mov = zip(*pairs) # sorted keypoints
-    print("Number of keypoints validated by RANSAC:",len(final_points_fix))
-    if output_ransac_matches:
-        save_plot_ransac_matches(fix_arr, mov_arr, final_points_fix, final_points_mov,output_path=output_ransac_matches)
 
     com_fix=center_of_mass(final_points_fix)
     com_mov=center_of_mass(final_points_mov)
