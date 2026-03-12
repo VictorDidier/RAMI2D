@@ -13,6 +13,7 @@ import argparse
 import os
 import itk
 import shutil
+import warnings
 #local libraries
 import ome_writer
 import initial_align
@@ -413,7 +414,24 @@ def resize_and_extract_channels(fix,mov,fix_ch,mov_ch,target_mpp):
             output_imgs.append(pre_img)
 
         elif im.props["color_type"]=="grayscale":
-            output_imgs.append(im.resize(target_mpp,ch=ch))
+            if isinstance(ch,int):
+                output_imgs.append(im.resize(target_mpp,ch=ch))
+            elif isinstance(ch,str):
+                warnings.warn(f"""Warning!: You requested the extraction of {hed2name[ch]}
+                                from {im.file}, this is only possible for an RGB image
+                                but the photometric value of your image file indicates that your image was saved as grayscale.
+                                """
+                                  )
+                if im.props["channels"]>=3:
+                    warnings.warn(f"Warning!:The first 3 channels of your image will be interpreted as RGB channels")
+                    pre_img=im.resize(target_mpp,ch=[0,1,2])
+                    pre_img=prt.get_hed_channels(pre_img,color_axis=im.props["ch_idx"])
+                    pre_img=pre_img[:,:,hed2index[ch]]
+                    output_imgs.append(pre_img)
+                else:
+                    raise ValueError(f"Cannot extract {hed2name[ch]} channel for a grayscale image with less than 3 channels")
+
+
 
     for n,im in enumerate(output_imgs):
         rsm,contrast=prt.measure_contrast(im)
@@ -505,9 +523,6 @@ def main(version):
         out_levels=moving_props["levels"]
     else:
         out_levels=levels
-
-
-
 
     #Extract channels of fixed image and moving image channels to be used for registration.
     #Resize both fixed and moving image to have the same mpp

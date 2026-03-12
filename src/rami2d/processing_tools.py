@@ -2,7 +2,7 @@ import tifffile as tifff
 import openslide
 from pathlib import Path
 import numpy as np
-from skimage.transform import resize
+from skimage import transform
 from skimage.color import rgb2hed
 from skimage.exposure import rescale_intensity
 from skimage.util import img_as_float32
@@ -137,8 +137,8 @@ class Image:
             axes=tif.pages[0].axes
             ch_idx=None if axes.find("S")==-1 else axes.find("S")
             if multichannel:
-                putative_ch_index=np.select([color_type=="grayscale",color_type=="RGB"],[0,2])
-                putative_offset=np.select([color_type=="grayscale",color_type=="RGB"],[1,0])
+                putative_ch_index=np.select([color_type=="grayscale",color_type=="RGB"],[0,2]).item()
+                putative_offset=np.select([color_type=="grayscale",color_type=="RGB"],[1,0]).item()
                 if ch_idx==None:
                     ch_idx=putative_ch_index
                     offset=putative_offset
@@ -237,10 +237,15 @@ class Image:
 
         if self.is_tiff:
             img_arr=tifff.imread(path,series=0,key=ch,level=nearest_lvl_index)
-
         if self.is_slide:
             img_arr=self.slide_level(nearest_lvl_index)
-        output_img=resize(img_arr, output_shape=target_dim,order=0,preserve_range=True).astype(img_type)
+
+        if len(img_arr)==2:
+            pass
+        elif len(img_arr)==3:
+            target_dim.insert(self.props["ch_idx"],3)
+
+        output_img=transform.resize(img_arr, output_shape=target_dim,order=0,preserve_range=True).astype(img_type)
         return output_img
 
 def get_hed_channels(rgb_img,color_axis):
@@ -249,9 +254,6 @@ def get_hed_channels(rgb_img,color_axis):
     hemato=np.take(ihc_hed,0,axis=color_axis)
     eosin=np.take(ihc_hed,1,axis=color_axis)
     dab=np.take(ihc_hed,2,axis=color_axis)
-    #hemato=ihc_hed[:,:,0]
-    #eosin=ihc_hed[:,:,1]
-    #dab=ihc_hed[:,:,2]
     gray_scale=np.zeros(hemato.shape+(3,),dtype="uint8")
     for ch,image in enumerate([hemato,eosin,dab]):
         gray_scale[:,:,ch]=np.rint( rescale_intensity(image,out_range=(0,255) ) ).astype("uint8")
@@ -328,3 +330,5 @@ def enhance_contrast(image):
         image_enhanced=image_enhanced.astype(data_type)
 
     return image_enhanced
+
+

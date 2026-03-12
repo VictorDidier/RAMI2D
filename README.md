@@ -102,5 +102,12 @@ This will download a container named
 
 - (2) Execute the register.py script inside the /tools folder in the .sif container.  Be aware of two things in the example below,(a) the variables mnt, media and tools are names of folders inside the container and need no editing in the example below. (b) We suppose that the macsima and maldi stacks and associated .csv information is in a local directory *input_directory*, while the output of the script will be written in a different local directory *output_directory*.
 
+# ACKNOWLEDGEMENTS
+Data sources:
+1) Data available on Synapse: https://www.synapse.org/Synapse:syn51449054
+from Wünnemann, F., Sicklinger, F., Bestak, K. et al.
+Spatial multiomics of acute myocardial infarction reveals immune cell infiltration through the endocardium.
+Nat Cardiovasc Res 4, 1345-1362 (2025). https://doi.org/10.1038/s44161-025-00717-y
+2) Modified from https://github.com/nf-core/test-datasets/tree/modules/data/imaging/hne_multiplexed
 
 
