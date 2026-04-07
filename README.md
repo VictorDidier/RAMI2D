@@ -37,6 +37,7 @@ The flowchart below shows how the tool processes the images, this workflow is th
 * registered image as pyramidal .ome.tif.
 * qc_reg directory with three folders: keypoints, fullres_trf and refchns.
 ### Examples
+check the sample data, scripts and jupyter notebook in
 * [sample_images](https://github.com/VictorDidier/RAMI2D/tree/main/data/samples) and its corresponding
 [cli_arguments](https://github.com/VictorDidier/RAMI2D/tree/main/examples) as .sh files.
 * [JupyterNotebook](https://github.com/VictorDidier/RAMI2D/blob/main/examples/apply_transform_to_labels.ipynb).
