@@ -1,0 +1,11 @@
+python -m rami2d.register 
+-fix "imf_timepoint1.ome.tif" \
+-ifix 0 \
+-mpp-fix 2 \
+-mov "imf_timepoint2.ome.tif" \
+-imov 1 \
+-mpp-mov 2 \
+-o "imf_imf" \
+-mpp-reg 2 \
+-mpp-key 3 \
+-a \

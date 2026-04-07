@@ -1,0 +1,11 @@
+python -m rami2d.register \
+-mov "HE.ome.tif" \
+-imov h \
+-mpp-mov 0.27 \
+-fix "multiplexed.ome.tif" \
+-ifix 0 \
+-mpp-fix 0.21 \
+-o "he_and_imf" \
+-mpp-reg 1 \
+-mpp-key 3 \
+-a
