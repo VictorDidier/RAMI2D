@@ -16,10 +16,32 @@ RAMI2D offers the following features:
 - **Outputs:** a registered image saved as pyramidal ome.tif, transformation parameters as.txt files, figure with keypoints matches, low-resolution preview of registration results.
 - **Test mode:** check intermediate results in low-resolution before applying them to the full-resolution image and all its channels.
 
-# FLOWCHART
+# Flowchart
 The flowchart below shows how the tool processes the images, this workflow is the usual footprint of a registration process and similarly can be found in tools like [RegisterVirtualSlices](https://github.com/fiji/register_virtual_stack_slices) or [palom](https://github.com/labsyspharm/palom).  The initial alignment via SIFT and RANSAC is a standard and was firstly shown by Brown, Matthew, and David G. Lowe in  ["Recognising panoramas"](https://doi.org/10.1109/ICCV.2003.1238630).
 
 ![Flowchart](https://github.com/VictorDidier/RAMI2D/blob/main/data/figs/flowchart-horizontal-annotations.png)
+
+# Use cases
+* H&E registered to multichannel immunofluorescence image:
+![he_imf](https://github.com/VictorDidier/RAMI2D/blob/main/data/figs/UseCase_01.png)
+* MALDI data registered to FISH image:
+![fish_maldi](https://github.com/VictorDidier/RAMI2D/blob/main/data/figs/fish_maldi2.png)
+
+# Quick guide
+### CLI
+* Required arguments: -fix, -mpp-fix, -ifix, -mov, -mpp-mov, -imov, -mpp-reg, -o
+* Optional arguments: -a, -fl, -mpp-key, -rsc, -gs, -fn, -pl, -comp, -m, -test
+### Input files
+* any file with formats .tif, .ome.tif, or supported by [openslide](https://openslide.org/formats/).
+### Output files
+* registered image as pyramidal .ome.tif.
+* qc_reg directory with three folders: keypoints, fullres_trf and refchns.
+### Examples
+* [sample_images] (https://github.com/VictorDidier/RAMI2D/tree/main/data/samples) and its corresponding
+[cli_arguments](https://github.com/VictorDidier/RAMI2D/tree/main/examples) as .sh files.
+* [JupyterNotebook] (https://github.com/VictorDidier/RAMI2D/blob/main/examples/apply_transform_to_labels.ipynb).
+
+
 
 # TERMS
 - fixed image: image to register against.
@@ -28,7 +50,7 @@ The flowchart below shows how the tool processes the images, this workflow is th
 - transformation map: set of parameters that define one or multiple geometrical transformations (Rigid,Translation,Affine, etc.).
 - registration map: set of parameters that define how the registration between fixed and moving images will be carried out,e.g. pixel sampling, interpolation order, output bit-depth, transformation, etc.
 
-# CLI arguments
+# CLI description
 The main script is ./src/rami2d/register.py.
 To visualize the documentation for each argument in your terminal, go to the ./src folder and run the following command
 ```
@@ -69,12 +91,6 @@ python -m rami2d.register --help
 | -m | Path | Path to a csv file with a column named marker_name, each row is the name of the channel in the ome metadata of the output file | NA |False|
 | -test | Boolean flag | Activate test mode to skip writting the final full resolution image, you can still check the registration results on the -mpp-reg resolution in the qc folder | NA |False|
 
-# CLI quick look
-
-### Required arguments
--fix, -mpp-fix, -ifix, -mov, -mpp-mov, -imov, -mpp-reg, -o
-## Optional arguments
--a, -fl, -mpp-key, -rsc, -gs, -fn, -pl, -comp, -m, -test
 
 
 # INSTALLATION AND USAGE
@@ -102,21 +118,20 @@ python -m rami2d.register --help
 ### via container
 
 **Singularity**
-- (1) Download container:
+Upcoming!
 
-```
-singularity pull docker://
-```
-This will download a container named
+**Docker**
+Upcoming!
 
--
-
-# ACKNOWLEDGEMENTS
-**Data sources:**
+# Data sources
 1) imf_imf: Data available on Synapse: https://www.synapse.org/Synapse:syn51449054
 from Wünnemann, F., Sicklinger, F., Bestak, K. et al. Spatial multiomics of acute myocardial infarction reveals immune cell infiltration through the endocardium. Nat Cardiovasc Res 4, 1345-1362 (2025). https://doi.org/10.1038/s44161-025-00717-y.
 
  2) fish_maldi:Data was collected by Dr. Veronika Saharuka (Metabolomics Core Technology Platform, Heidelberg University) and Dr. James Cleland (Division of Regulatory Genomics and Cancer Evolution, DKFZ).
 
  3) he_imf: modified from https://www.10xgenomics.com/datasets/xenium-ffpe-human-breast-biomarkers.
+ 
+ # Acknowledgements
+ This tool developed during my time in the [SchapiroLab](https://www.schapirolab.com/) in Heidelberg – I'm grateful for the opportunity and setting that made it possible.
+
 
