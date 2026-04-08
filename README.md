@@ -133,6 +133,4 @@ from Wünnemann, F., Sicklinger, F., Bestak, K. et al. Spatial multiomics of acu
  3) he_imf: modified from https://www.10xgenomics.com/datasets/xenium-ffpe-human-breast-biomarkers.
  
  # Acknowledgements
- This tool was developed during my time in the [SchapiroLab](https://www.schapirolab.com/) in Heidelberg – I'm grateful for the opportunity and setting that made it possible.
-
-
+ This tool was developed during my time in the [SchapiroLab](https://www.schapirolab.com/) in Heidelberg – I'm grateful for the opportunity and setting that made it possible. Particular thanks to [Sebastian Gonzalez](https://github.com/sebgoti) for initial discussions on effective strategies for the registration of whole slide images.
