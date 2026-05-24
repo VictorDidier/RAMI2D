@@ -1,18 +1,19 @@
-![Logo](https://github.com/VictorDidier/RAMI2D/blob/main/data/figs/logo2.png)
+![Logo](https://github.com/VictorDidier/RAMI2D/blob/main/figs/logo2.png)
 # Description
 
-(RAMI2D) Robust Alignment of Multichannel Images in 2D consists of two command-line interface tools (CLI), *rami2d-register* and *rami2d-transform*. The first one allows the registration between a moving and a fixed image in a convenient way by exposing multiple parameters that control the registration output. The second tool transforms images associated to the moving image, e.g. concurrent acquisitions, segmentation masks or annotations, so they are also registered to the fixed image.
+(RAMI2D) Robust Alignment of Multichannel Images in 2D consists of two command-line interface(CLI) tools, *rami2d-register* and *rami2d-transform*. The first one allows the registration between a moving and a fixed image in a convenient way by exposing multiple parameters that control the registration output. The second tool transforms images associated to the moving image, e.g. concurrent acquisitions, segmentation masks or annotations, so they are also registered to the fixed image.
 
-These tools together provide two main features: a) a CLI to carry out registration/transformations via the renowned library [itk-elastix](https://github.com/InsightSoftwareConsortium/ITKElastix) and b) handling the reading/writing of multichannel pyramidal images and its metadata. 
+These tools together provide two main features: a) CLIs to carry out registration/transformations via the renowned library [itk-elastix](https://github.com/InsightSoftwareConsortium/ITKElastix) aand b) handling the reading/writing of multichannel pyramidal images and its metadata.
 
-*rami2d-register* offers 3 pre-defined registration schemes: 1) Rigid, 2) Rigid+Affine 3) Rigid+Affine+Bsplines, each of them providing more geometrical adaptability and thus more control in the final outcome.  If the fixed and moving images are very misaligned, e.g. rotated by large angles, mirrored and/or have partially overlapping fields of view, *rami2d-register* provides an option to estimate an initial alignment by finding keypoints via SIFT and RANSAC algorithms. These keypoints are used to construct an itk transformation map that is then passed as an initial alignment for the pre-defined registration schemes.
+*rami2d-register* offers 3 pre-defined registration schemes: 1) Rigid, 2) Rigid+Affine 3) Rigid+Affine+Bsplines, each of them providing more geometrical adaptability and thus more control in the final outcome.  If the fixed and moving images are very misaligned, e.g. rotated by large angles, mirrored and/or have partially overlapping fields of view, *rami2d-register* provides an option to estimate an initial alignment by finding keypoints via SIFT and RANSAC algorithms. These keypoints are used to construct an initial alignment that is passed to the pre-defined registration schemes. The main results of the registration are the registered moving image and the transformation maps that can later be applied via *rami2d-transform*.
+
 
 # Features
 - **Supported input formats:** multi-channel grayscale and single-page RGB saved as ome.tif,tif and any format supported by [OpenSlide](https://openslide.org/).
-- **Multimodal registration:** different microscopy modalities can be registered, H&E,Fluorescence, MALDI, whatever produces pixels in the formats mentioned above.
-- **Multi-scale:** Fixed and moving images can have different resolutions.
+- **Multi-modal registration:** different microscopy modalities can be registered, H&E,Fluorescence, MALDI, whatever produces pixels in the formats mentioned above.
+- **Multi-resolution:** Fixed and moving images can have different pixel sizes.
 - **Registration of consecutive slices**.
-- **Multi-step registration scheme:** Scheme-1) Rigid, Scheme-2) Rigid->Affine, Scheme-3)Rigid->Affine->Bsplines.
+- **Sequential multi-step registration scheme:** Scheme-1) Rigid, Scheme-2) Rigid->Affine, Scheme-3)Rigid->Affine->Bsplines.
 - **Outputs:** a registered image saved as pyramidal ome.tif, transformation parameters as.txt files, figure with keypoints matches, low-resolution preview of registration results.
 - **Test mode:** check intermediate results in low-resolution before applying them to the full-resolution image and all its channels.
 
@@ -23,11 +24,11 @@ The flowchart below shows how the registration tool processes the images, this w
 
 
 # Use cases
-* **Multimodal registration: H&E and immunofluorescence (multichannel)**
+* **Multimodal registration: H&E (moving) and immunofluorescence multichannel (fixed)**
 ![he_imf](https://github.com/VictorDidier/RAMI2D/blob/main/figs/UseCase_01.png)
-* **Register annotations: transfer annotations done on H&E to the immunofluorescence image**
+* **Transfer annotations from the moving to the fixed image**
 ![he_annotations](https://github.com/VictorDidier/RAMI2D/blob/main/figs/UseCase_02.png)
-* **Multimodal and multiscale: MALDI registered to FISH image**
+* **Register multimodal/multiresolution data: MALDI registered to FISH image**
 ![fish_maldi](https://github.com/VictorDidier/RAMI2D/blob/main/figs/UseCase_03.png)
 
 
@@ -145,17 +146,28 @@ rami2d-transform --help
 
 # Container
 
-**Singularity**
-Upcoming!
-
 **Docker**
-Upcoming!
+```
+docker pull ghcr.io/VictorDidier/RAMI2D:v1.0.0
+```
+
+**Singularity**
+```
+singularity pull docker://ghcr.io/VictorDidier/RAMI2D:v1.0.0
+```
 
 ## Examples
-check the sample data, scripts and jupyter notebook in
-* [sample_images](https://github.com/VictorDidier/RAMI2D/tree/main/data/samples) and its corresponding
+### Step 1: download sample data
+There are three sample data sets in the branch of this repo. Check it here [sample_data](https://github.com/VictorDidier/RAMI2D/tree/sample_data), and download them 
+
+- Download sample data from the [sample_data](https://github.com/VictorDidier/RAMI2D/tree/sample_data) branch of this repo.
+Or by executing the command:
+```
+wget https://github.com/[user]/[repo]/archive/refs/tags/[tag name].zip
+```
+### Step 2: Run the 
 [cli_arguments](https://github.com/VictorDidier/RAMI2D/tree/main/examples) as .sh files.
-* [JupyterNotebook](https://github.com/VictorDidier/RAMI2D/blob/main/examples/apply_transform_to_labels.ipynb).
+
 
 
 # Data sources
