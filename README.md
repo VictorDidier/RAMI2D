@@ -1,5 +1,5 @@
 # Data description
-## 1) fish_and_maldi
+**1) fish_and_maldi**
 - fish.ome.tif:
     - 5 mpp
     - 2 channels
@@ -9,7 +9,7 @@
 - mald_flip.tif: 
     - mirrored version of maldi.tif
 
-## 2) imf_and_he
+**2) imf_and_he**
 - HE.ome.tif
     - 0.27 mpp
     - single page tif with 3 channels (RGB)
@@ -20,7 +20,7 @@
     - 0.27 mpp
     - annotations done on the H&E image
 
-## 3) imf_and_imf
+**3) imf_and_imf**
 - imf_timepoint1.ome.tif
     - 2 mpp
     - 2 channels
