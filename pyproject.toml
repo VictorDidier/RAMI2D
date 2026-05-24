@@ -21,7 +21,7 @@ requires-python = ">=3.11"
 dependencies = [
     "tifffile==2025.6.11",
     "ome-types==0.6.1",
-    "scikit-image=0.25.2",
+    "scikit-image==0.25.2",
     "pandas==2.2.2",
     "matplotlib==3.10.8",
     "itk-elastix==0.23.0",
@@ -42,8 +42,8 @@ keywords = [
 [tool.setuptools.packages.find]
 where = ["src"]
 
-[tool.setuptools]
-include-package-data = true
+[tool.setuptools.package-data]
+"rami2d" = ["maps/*"]
 
 [tool.setuptools.dynamic]
 version = { attr = "rami2d.version.__version__" }
