@@ -1,11 +1,11 @@
 ![Logo](https://github.com/VictorDidier/RAMI2D/blob/main/data/figs/logo2.png)
 # Description
 
-(RAMI2D) Robust Alignment of Multichannel Images in 2D is comprised of two command-line interface tools (CLI), rami2d-register and rami2d-transform. The first one allows the registration between a moving and a fixed image in a convenient way by exposing multiple parameters that control the registration output. The second tool transforms images associated to the moving image, e.g. concurrent acquisitions, segmentation masks or annotations, so they are also registered to the fixed image.
+(RAMI2D) Robust Alignment of Multichannel Images in 2D consists of two command-line interface tools (CLI), *rami2d-register* and *rami2d-transform*. The first one allows the registration between a moving and a fixed image in a convenient way by exposing multiple parameters that control the registration output. The second tool transforms images associated to the moving image, e.g. concurrent acquisitions, segmentation masks or annotations, so they are also registered to the fixed image.
 
-These tools together provide two main features: a) a CLI to carry out registration/transformations via [itk-elastix](https://github.com/InsightSoftwareConsortium/ITKElastix) and b) handling the reading/writing of multichannel pyramidal images and its metadata. 
+These tools together provide two main features: a) a CLI to carry out registration/transformations via the renowned library [itk-elastix](https://github.com/InsightSoftwareConsortium/ITKElastix) and b) handling the reading/writing of multichannel pyramidal images and its metadata. 
 
-RAMI2D offers 3 pre-defined registration schemes: 1) Rigid, 2) Rigid+Affine 3) Rigid+Affine+Bsplines, each of them providing more geometrical adaptability and thus more control in the final outcome.  If the fixed and moving images are very missaligned, e.g. rotated in large angles, mirrored and/or partially overlapping fields of view RAMI2D provides an option to estimate an initial alignment by finding keypoints via SIFT and RANSAC algorithms. These keypoints are used to construct an itk transformation map that is ingested as an initial alignment to the pre-defined registration schemes.
+*rami2d-register* offers 3 pre-defined registration schemes: 1) Rigid, 2) Rigid+Affine 3) Rigid+Affine+Bsplines, each of them providing more geometrical adaptability and thus more control in the final outcome.  If the fixed and moving images are very misaligned, e.g. rotated by large angles, mirrored and/or have partially overlapping fields of view, *rami2d-register* provides an option to estimate an initial alignment by finding keypoints via SIFT and RANSAC algorithms. These keypoints are used to construct an itk transformation map that is then passed as an initial alignment for the pre-defined registration schemes.
 
 # Features
 - **Supported input formats:** multi-channel grayscale and single-page RGB saved as ome.tif,tif and any format supported by [OpenSlide](https://openslide.org/).
@@ -19,15 +19,16 @@ RAMI2D offers 3 pre-defined registration schemes: 1) Rigid, 2) Rigid+Affine 3) R
 # Registration flowchart
 The flowchart below shows how the registration tool processes the images, this workflow is the usual footprint of a registration process and similarly can be found in tools like [RegisterVirtualSlices](https://github.com/fiji/register_virtual_stack_slices) or [palom](https://github.com/labsyspharm/palom).  The initial alignment via SIFT and RANSAC is a standard method firstly shown by Brown, Matthew, and David G. Lowe in  ["Recognising panoramas"](https://doi.org/10.1109/ICCV.2003.1238630).
 
-![Flowchart](https://github.com/VictorDidier/RAMI2D/blob/main/data/figs/flowchart-horizontal-annotations.png)
+![Flowchart](https://github.com/VictorDidier/RAMI2D/blob/main/figs/flowchart-horizontal-annotations.png)
 
 
 # Use cases
 * **Multimodal registration: H&E and immunofluorescence (multichannel)**
-![he_imf](https://github.com/VictorDidier/RAMI2D/blob/main/data/figs/UseCase_01.png)
+![he_imf](https://github.com/VictorDidier/RAMI2D/blob/main/figs/UseCase_01.png)
 * **Register annotations: transfer annotations done on H&E to the immunofluorescence image**
+![he_annotations](https://github.com/VictorDidier/RAMI2D/blob/main/figs/UseCase_02.png)
 * **Multimodal and multiscale: MALDI registered to FISH image**
-![fish_maldi](https://github.com/VictorDidier/RAMI2D/blob/main/data/figs/fish_maldi2.png)
+![fish_maldi](https://github.com/VictorDidier/RAMI2D/blob/main/figs/UseCase_03.png)
 
 
 # Quick guide
