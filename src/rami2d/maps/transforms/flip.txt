@@ -1,0 +1,33 @@
+(Direction 1 0 0 1)
+(FixedImageDimension 2)
+(FixedInternalImagePixelType "float")
+(HowToCombineTransforms "Compose")
+(Index 0 0)
+(InitialTransformParameterFileName "NoInitialTransform")
+(MovingImageDimension 2)
+(MovingInternalImagePixelType "float")
+(NumberOfParameters 6)
+(Origin 0 0)
+(Size 256 256)
+(Spacing 1 1)
+(Transform "AffineTransform")
+
+//FLIP HORIZONTALLY (i.e. left<->right)
+//flip_matrix = [-1.0, 0.0, 0.0, 1.0]  # 2D affine parameters
+//translation = [0.0, 0.0]  # No translation
+//TransformParameters  = flip_matrix + translation
+
+(TransformParameters -1.0 0.0 0.0 1.0 0.0 0.0)
+(UseDirectionCosines "true")
+
+// ResampleInterpolator specific
+(FinalBSplineInterpolationOrder 1)
+(ResampleInterpolator "FinalBSplineInterpolator")
+
+// Resampler specific
+(CompressResultImage "false")
+(DefaultPixelValue 0)
+(Resampler "DefaultResampler")
+(ResultImageFormat "tif")
+(ResultImagePixelType "float")
+(CenterOfRotationPoint 0 0)
