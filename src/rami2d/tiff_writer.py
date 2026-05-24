@@ -1,7 +1,7 @@
 import tifffile as tifff
 from types import GeneratorType
 from skimage.transform import pyramid_gaussian
-
+from pathlib import Path
 def extract_levels_from_tiff(path,ch,levs):
     with tifff.TiffFile(path) as tif:
         for l in range(levs):
