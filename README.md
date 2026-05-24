@@ -131,7 +131,7 @@ this cli was designed to take the transformation maps produced by the *register*
 
 
 
-# Installation via pip
+# Installation via pip (Not available yet, almost there)
 - (1) Run the command
 ```
 pip install rami2d
@@ -144,7 +144,7 @@ rami2d-register --help
 rami2d-transform --help
 ```
 
-# Container
+# Container ( Not available yet, almost there )
 
 **Docker**
 ```
@@ -158,25 +158,25 @@ singularity pull docker://ghcr.io/VictorDidier/RAMI2D:v1.0.0
 
 ## Examples
 ### Step 1: download sample data
-There are three sample data sets in the branch of this repo. Check it here [sample_data](https://github.com/VictorDidier/RAMI2D/tree/sample_data), and download them 
+There are three sample data sets in the [sample_data](https://github.com/VictorDidier/RAMI2D/tree/sample_data) branch of this repo. Check the brief data description in that branch.  You can download the data by:
 
-- Download sample data from the [sample_data](https://github.com/VictorDidier/RAMI2D/tree/sample_data) branch of this repo.
-Or by executing the command:
+- clicking [here](https://github.com/VictorDidier/RAMI2D/archive/refs/tags/data-v1.zip) branch of this repo.
+- or by executing in your terminal the command:
 ```
-wget https://github.com/[user]/[repo]/archive/refs/tags/[tag name].zip
+curl -L --output data.zip https://github.com/VictorDidier/RAMI2D/archive/refs/tags/data-v1.zip
 ```
-### Step 2: Run the 
-[cli_arguments](https://github.com/VictorDidier/RAMI2D/tree/main/examples) as .sh files.
-
+### Step 2: run corresponding commands
+In the [examples](https://github.com/VictorDidier/RAMI2D/tree/main/examples) folder of this repo you can find corresponding bash scripts (.sh) to the sample data.  You will find examples there to run *rami2d-register* and *rami2d-transform*.
 
 
 # Data sources
-1) imf_imf: Data available on Synapse: https://www.synapse.org/Synapse:syn51449054
+1) fish_maldi:Data was collected by Dr. Veronika Saharuka (Metabolomics Core Technology Platform, Heidelberg University) and Dr. James Cleland (Division of Regulatory Genomics and Cancer Evolution, DKFZ).
+
+2) imf_he: modified from https://www.10xgenomics.com/datasets/xenium-ffpe-human-breast-biomarkers.
+
+
+3) imf_imf: Data available on Synapse: https://www.synapse.org/Synapse:syn51449054
 from Wünnemann, F., Sicklinger, F., Bestak, K. et al. Spatial multiomics of acute myocardial infarction reveals immune cell infiltration through the endocardium. Nat Cardiovasc Res 4, 1345-1362 (2025). https://doi.org/10.1038/s44161-025-00717-y.
-
- 2) fish_maldi:Data was collected by Dr. Veronika Saharuka (Metabolomics Core Technology Platform, Heidelberg University) and Dr. James Cleland (Division of Regulatory Genomics and Cancer Evolution, DKFZ).
-
- 3) he_imf: modified from https://www.10xgenomics.com/datasets/xenium-ffpe-human-breast-biomarkers.
  
  # Acknowledgements
  This tool was developed during my time in the [SchapiroLab](https://www.schapirolab.com/) in Heidelberg – I'm grateful for the opportunity and setting that made it possible. Particular thanks to [Sebastian Gonzalez](https://github.com/sebgoti) for initial discussions on effective strategies for the registration of whole slide images.
