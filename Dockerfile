@@ -38,4 +38,5 @@ COPY pyproject.toml .
 COPY LICENSE.txt .
 COPY README.md .
 #COPY . .
-RUN pip install --no-cache-dir -e .
+#RUN pip install --no-cache-dir -e .
+RUN PYTHONPATH="/app/src" pip install --no-cache-dir --no-build-isolation -e .
