@@ -5,6 +5,7 @@ import itk
 import tifffile as tifff
 import tracemalloc
 import time
+import pandas as pd
 #local scripts
 from .register import apply_transform
 from .tiff_writer import generate_tiff_pyramid
