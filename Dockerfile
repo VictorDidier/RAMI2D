@@ -30,8 +30,8 @@ RUN micromamba create --name rami2d-env python=3.11 -c conda-forge -c bioconda -
 ENV PATH=$MAMBA_ROOT_PREFIX/envs/rami2d-env/bin:$PATH
 
 # Copy only necessary files (minimal)
-COPY --chown=mambauser:mambauser pyproject.toml README.md LICENSE.txt ./
-COPY --chown=mambauser:mambauser src/ ./src/
+COPY --chown=mambauser:mambauser pyproject.toml README.md LICENSE.txt .
+COPY --chown=mambauser:mambauser src/ .
 
 # Install your package inside the activated environment
 RUN pip install --no-cache-dir .
