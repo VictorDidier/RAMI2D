@@ -37,4 +37,4 @@ COPY src .
 COPY pyproject.toml .
 COPY LICENSE.txt .
 COPY README.md .
-RUN PYTHONPATH="/app/src" pip install --no-cache-dir .
+RUN PYTHONPATH="/app/src" pip install --no-cache-dir --no-build-isolation .
