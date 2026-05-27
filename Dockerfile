@@ -19,7 +19,7 @@ RUN apt-get update -qq && apt-get install -y \
 ARG MAMBA_ROOT_PREFIX=/opt/conda
 
 # Add /opt/conda/bin to the PATH
-ENV PATH $MAMBA_ROOT_PREFIX/bin:$PATH
+ENV PATH=$MAMBA_ROOT_PREFIX/bin:$PATH
 
 # Install dependencies with micromamba, clean afterwards
 RUN micromamba create --name rami2d-env python=3.11 -c conda-forge -c bioconda -y \
@@ -37,4 +37,4 @@ COPY src .
 COPY pyproject.toml .
 COPY LICENSE.txt .
 COPY README.md .
-RUN pip install --no-cache-dir .
+RUN PYTHONPATH="/app/src" pip install --no-cache-dir .
