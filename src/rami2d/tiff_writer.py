@@ -2,10 +2,23 @@ import tifffile as tifff
 from types import GeneratorType
 from skimage.transform import pyramid_gaussian
 from pathlib import Path
+import itertools
+
 def extract_levels_from_tiff(path,ch,levs):
     with tifff.TiffFile(path) as tif:
         for l in range(levs):
             yield tif.series[0].levels[l].pages[ch].asarray()
+
+def is_pyramid(img_path):
+    """
+    Checks if image has pyramidal levels
+
+    """
+
+    with tifff.TiffFile(img_path) as tif:
+        levels=len(tif.series[0].levels)
+        pyramid=levels > 1
+    return pyramid,levels
 
 def generate_tiff_pyramid(img_instances,
                     levels,
