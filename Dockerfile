@@ -1,16 +1,11 @@
-FROM mambaorg/micromamba:latest
+# Use the official micromamba image as a base
+FROM mambaorg/micromamba:2.0.8
 LABEL maintainer="Victor Perez"
 
-# define root prefix (using default location for mambauser)
-ARG MAMBA_ROOT_PREFIX=/home/mambauser/micromamba
-
-# add micromamba's bin directory to PATH ----
-ENV PATH=$MAMBA_ROOT_PREFIX/bin:$PATH
-
-# Temporarily switch to root to install system dependencies
+# Set the base layer for micromamba
 USER root
-WORKDIR /tool
 
+# Update package manager and install essential build tools
 RUN apt-get update -qq && apt-get install -y \
     build-essential \
     ffmpeg \
@@ -20,18 +15,26 @@ RUN apt-get update -qq && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Switch back to mambauser for the rest (security)
-USER mambauser
+# Set the environment variable for the root prefix
+ARG MAMBA_ROOT_PREFIX=/opt/conda
 
-# Create environment with conda-forge and bioconda channels
+# Add /opt/conda/bin to the PATH
+ENV PATH $MAMBA_ROOT_PREFIX/bin:$PATH
+
+# Install dependencies with micromamba, clean afterwards
 RUN micromamba create --name rami2d-env python=3.11 -c conda-forge -c bioconda -y \
     && micromamba clean --all --yes
-# auto-activate the environment by prepending its bin to PATH ----
-ENV PATH=$MAMBA_ROOT_PREFIX/envs/rami2d-env/bin:$PATH
+# auto-activate the environment by pre
 
-# Copy only necessary files (minimal)
-COPY --chown=mambauser:mambauser pyproject.toml README.md LICENSE.txt .
-COPY --chown=mambauser:mambauser src/ .
+# Add environment to PATH
+ENV PATH="/opt/conda/envs/rami2d-env/bin:$PATH"
 
-# Install your package inside the activated environment
+# Set the working directory
+WORKDIR /app
+
+# Copy contents of the folder to the working directory
+COPY src .
+COPY pyproject.toml .
+COPY LICENSE.txt .
+COPY README.md .
 RUN pip install --no-cache-dir .
