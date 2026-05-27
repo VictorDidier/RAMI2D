@@ -33,8 +33,9 @@ ENV PATH="/opt/conda/envs/rami2d-env/bin:$PATH"
 WORKDIR /app
 
 # Copy contents of the folder to the working directory
-COPY src .
-COPY pyproject.toml .
-COPY LICENSE.txt .
-COPY README.md .
-RUN PYTHONPATH="/app/src" pip install --no-cache-dir --no-build-isolation .
+#COPY src .
+#COPY pyproject.toml .
+#COPY LICENSE.txt .
+#COPY README.md .
+COPY . .
+RUN pip install --no-cache-dir -e .
