@@ -1,9 +1,9 @@
-![Logo](https://github.com/VictorDidier/RAMI2D/blob/main/figs/logo2.png)
+![Logo](https://raw.githubusercontent.com/VictorDidier/RAMI2D/main/figs/logo2.png?raw=true)
 # Description
 
 (RAMI2D) Robust Alignment of Multichannel Images in 2D consists of two command-line interface(CLI) tools, *rami2d-register* and *rami2d-transform*. The first one allows the registration between a moving and a fixed image in a convenient way by exposing multiple parameters that control the registration output. The second tool transforms images associated to the moving image, e.g. concurrent acquisitions, segmentation masks or annotations, so they are also registered to the fixed image.
 
-These tools together provide two main features: a) CLIs to carry out registration/transformations via the renowned library [itk-elastix](https://github.com/InsightSoftwareConsortium/ITKElastix) aand b) handling the reading/writing of multichannel pyramidal images and its metadata.
+These tools together provide two main features: a) CLIs to carry out registration/transformations via the renowned library [itk-elastix](https://github.com/InsightSoftwareConsortium/ITKElastix) and b) handling the reading/writing of multichannel pyramidal images and its metadata.
 
 *rami2d-register* offers 3 pre-defined registration schemes: 1) Rigid, 2) Rigid+Affine 3) Rigid+Affine+Bsplines, each of them providing more geometrical adaptability and thus more control in the final outcome.  If the fixed and moving images are very misaligned, e.g. rotated by large angles, mirrored and/or have partially overlapping fields of view, *rami2d-register* provides an option to estimate an initial alignment by finding keypoints via SIFT and RANSAC algorithms. These keypoints are used to construct an initial alignment that is passed to the pre-defined registration schemes. The main results of the registration are the registered moving image and the transformation maps that can later be applied via *rami2d-transform*.
 
@@ -20,16 +20,16 @@ These tools together provide two main features: a) CLIs to carry out registratio
 # Registration flowchart
 The flowchart below shows how the registration tool processes the images, this workflow is the usual footprint of a registration process and similarly can be found in tools like [RegisterVirtualSlices](https://github.com/fiji/register_virtual_stack_slices) or [palom](https://github.com/labsyspharm/palom).  The initial alignment via SIFT and RANSAC is a standard method firstly shown by Brown, Matthew, and David G. Lowe in  ["Recognising panoramas"](https://doi.org/10.1109/ICCV.2003.1238630).
 
-![Flowchart](https://github.com/VictorDidier/RAMI2D/blob/main/figs/flowchart-horizontal-annotations.png)
+![Flowchart](https://raw.githubusercontent.com/VictorDidier/RAMI2D/main/figs/flowchart-horizontal-annotations.png?raw=true)
 
 
 # Use cases
-* **Multimodal registration: H&E (moving) and immunofluorescence multichannel (fixed)**
-![he_imf](https://github.com/VictorDidier/RAMI2D/blob/main/figs/UseCase_01.png?raw=true)
-* **Transfer annotations from the moving to the fixed image**
-![he_annotations](https://github.com/VictorDidier/RAMI2D/blob/main/figs/UseCase_02.png)
-* **Register multimodal/multiresolution data: MALDI registered to FISH image**
-![fish_maldi](https://github.com/VictorDidier/RAMI2D/blob/main/figs/UseCase_03.png)
+* ## Multimodal registration: H&E (moving) and immunofluorescence multichannel (fixed)
+![he_imf](https://raw.githubusercontent.com/VictorDidier/RAMI2D/main/figs/UseCase_01.png?raw=true)
+* ## Transfer annotations from the moving to the fixed image 
+![he_annotations](https://raw.githubusercontent.com/VictorDidier/RAMI2D/main/figs/UseCase_02.png?raw=true)
+* ## Register multimodal/multiresolution data: MALDI registered to FISH image
+![fish_maldi](https://raw.githubusercontent.com/VictorDidier/RAMI2D/main/figs/UseCase_03.png?raw=true)
 
 
 # Quick guide
@@ -158,15 +158,15 @@ singularity pull docker://ghcr.io/VictorDidier/rami2d:v1.0.0
 
 ## Examples
 ### Step 1: download sample data
-There are three sample data sets in the [sample_data](https://github.com/VictorDidier/RAMI2D/tree/sample_data) branch of this repo. Check the brief data description in that branch.  You can download the data by:
+There are three sample data sets in this repository branch -> [sample_data](https://github.com/VictorDidier/RAMI2D/tree/sample_data), check also there the brief data description and download the images by:
 
-- clicking [here](https://github.com/VictorDidier/RAMI2D/archive/refs/tags/data-v1.zip).
-- or by executing in your terminal the command:
+- clicking [here](https://github.com/VictorDidier/RAMI2D/archive/refs/tags/data-v1.zip) or
+- by executing in your terminal the command:
 ```
 curl -L --output data.zip https://github.com/VictorDidier/RAMI2D/archive/refs/tags/data-v1.zip
 ```
 ### Step 2: run corresponding commands
-In the [examples](https://github.com/VictorDidier/RAMI2D/tree/main/examples) folder of this repo you can find corresponding bash scripts (.sh) to the sample data.  You will find examples there to run *rami2d-register* and *rami2d-transform*.
+Find in the folder in this link -> [examples](https://github.com/VictorDidier/RAMI2D/tree/main/examples) the corresponding bash scripts (.sh) to the sample images.  You will find there examples to run *rami2d-register* and *rami2d-transform*.
 
 
 # Data sources
