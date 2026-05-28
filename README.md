@@ -25,9 +25,9 @@ The flowchart below shows how the registration tool processes the images, this w
 
 # Use cases
 * ## Multimodal registration: H&E (moving) and immunofluorescence multichannel (fixed)
-![he_imf](https://raw.githubusercontent.com/VictorDidier/RAMI2D/main/figs/UseCase_01.png?raw=true)
+![he_imf](https://raw.githubusercontent.com/VictorDidier/RAMI2D/main/figs/UseCase_01_comp.jpg?raw=true)
 * ## Transfer annotations from the moving to the fixed image 
-![he_annotations](https://raw.githubusercontent.com/VictorDidier/RAMI2D/main/figs/UseCase_02.png?raw=true)
+![he_annotations](https://raw.githubusercontent.com/VictorDidier/RAMI2D/main/figs/UseCase_02_comp.jpg?raw=true)
 * ## Register multimodal/multiresolution data: MALDI registered to FISH image
 ![fish_maldi](https://raw.githubusercontent.com/VictorDidier/RAMI2D/main/figs/UseCase_03.png?raw=true)
 
