@@ -20,7 +20,9 @@ classifiers = [
 requires-python = ">=3.11"
 dependencies = [
     "tifffile==2025.6.11",
+    "imagecodecs==2026.3.6",
     "ome-types==0.6.1",
+    "lxml==6.0.2",
     "scikit-image==0.25.2",
     "pandas==2.2.2",
     "matplotlib==3.10.8",
@@ -43,7 +45,7 @@ keywords = [
 where = ["src"]
 
 [tool.setuptools.package-data]
-"rami2d" = ["maps/*"]
+"rami2d" = ["maps/**/*"]
 
 [tool.setuptools.dynamic]
 version = { attr = "rami2d.version.__version__" }

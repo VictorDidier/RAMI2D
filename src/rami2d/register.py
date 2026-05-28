@@ -16,6 +16,7 @@ from . import initial_align
 from . import processing_tools as prt
 from .processing_tools import ImageFileGateway
 from .tiff_writer import generate_tiff_pyramid
+from .version import __version__
 
 
 
@@ -193,6 +194,12 @@ def get_args():
                     This mode is useful with big images that do not fit in RAM.  You can activate this mode and
                     check the results of the registration on the downsampled images by going into the qc_folder created in the output folder.
                     """
+                    )
+    
+    parser.add_argument('-v',
+                    '--version',
+                    action='version',
+                    version=f"{__version__}"
                     )
 
 
@@ -457,7 +464,7 @@ def make_outdirs(out_root_dir):
 
 
 
-def main(version):
+def main():
 
     #Collect arguments
     args = get_args()
@@ -596,17 +603,16 @@ def main(version):
         else:
             channel_names=[f"Channel-{ch}" for ch in range(moving_props_out["channels"])]
         #Write metadata in OME format into the pyramidal file
-        ome_xml=ome_writer.create_ome(channel_names,moving_props_out,version)
+        ome_xml=ome_writer.create_ome(channel_names,moving_props_out,f"rami2d-{__version__}")
         tifff.tiffcomment(out_img_path, ome_xml.encode("utf-8"))
 
 
 if __name__ == '__main__':
-    _version = 'v1.5.0'
 
     tracemalloc.start()
     st = time.time()
 
-    main(_version)
+    main()
 
     print("Memory peak:",((10**(-9))*tracemalloc.get_traced_memory()[1],"GB"))
     rt = time.time() - st

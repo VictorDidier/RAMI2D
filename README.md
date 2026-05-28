@@ -25,7 +25,7 @@ The flowchart below shows how the registration tool processes the images, this w
 
 # Use cases
 * **Multimodal registration: H&E (moving) and immunofluorescence multichannel (fixed)**
-![he_imf](https://github.com/VictorDidier/RAMI2D/blob/main/figs/UseCase_01.png)
+![he_imf](https://github.com/VictorDidier/RAMI2D/blob/main/figs/UseCase_01.png?raw=true)
 * **Transfer annotations from the moving to the fixed image**
 ![he_annotations](https://github.com/VictorDidier/RAMI2D/blob/main/figs/UseCase_02.png)
 * **Register multimodal/multiresolution data: MALDI registered to FISH image**
@@ -148,19 +148,19 @@ rami2d-transform --help
 
 **Docker**
 ```
-docker pull ghcr.io/VictorDidier/RAMI2D:v1.0.0
+docker pull ghcr.io/VictorDidier/rami2d:v1.0.0
 ```
 
 **Singularity**
 ```
-singularity pull docker://ghcr.io/VictorDidier/RAMI2D:v1.0.0
+singularity pull docker://ghcr.io/VictorDidier/rami2d:v1.0.0
 ```
 
 ## Examples
 ### Step 1: download sample data
 There are three sample data sets in the [sample_data](https://github.com/VictorDidier/RAMI2D/tree/sample_data) branch of this repo. Check the brief data description in that branch.  You can download the data by:
 
-- clicking [here](https://github.com/VictorDidier/RAMI2D/archive/refs/tags/data-v1.zip) branch of this repo.
+- clicking [here](https://github.com/VictorDidier/RAMI2D/archive/refs/tags/data-v1.zip).
 - or by executing in your terminal the command:
 ```
 curl -L --output data.zip https://github.com/VictorDidier/RAMI2D/archive/refs/tags/data-v1.zip

@@ -11,6 +11,7 @@ from .register import apply_transform
 from .tiff_writer import generate_tiff_pyramid
 from .processing_tools import ImageFileGateway
 from . import ome_writer
+from .version import __version__
 
 
 # CLI
@@ -86,11 +87,18 @@ def get_args():
                         """
                         )
     
+    parser.add_argument('-v',
+                    '--version',
+                    dest='version',
+                    action='version',
+                    version=f"{__version__}"
+                    )
+    
     args=parser.parse_args()
     return args
     
 
-def main(version):
+def main():
     # Get cli arguments 
     args=get_args()
     image_path=args.image_file_path
@@ -142,7 +150,7 @@ def main(version):
             channel_names=pd.read_csv(markers)["marker_name"].tolist()
         else:
             channel_names=[f"Channel-{ch}" for ch in range(props_out["channels"])]
-        ome_xml=ome_writer.create_ome(channel_names,props_out,version)
+        ome_xml=ome_writer.create_ome(channel_names,props_out,f"rami2d-{__version__}")
         tifff.tiffcomment(out_file_path, ome_xml.encode("utf-8"))
 
 
@@ -150,9 +158,7 @@ if __name__ == '__main__':
 
     tracemalloc.start()
     st = time.time()
-    _version="betatest"
-    main(_version)
-
+    main()
     print("Memory peak:",((10**(-9))*tracemalloc.get_traced_memory()[1],"GB"))
     rt = time.time() - st
     tracemalloc.stop()
