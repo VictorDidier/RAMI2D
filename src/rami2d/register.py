@@ -445,7 +445,7 @@ def validate_align_args(args):
         pass
 
 def make_outdirs(out_root_dir):
-    qc_dir=out_root_dir / "qc_reg"
+    qc_dir=out_root_dir / "qc"
     outdirs={"root":out_root_dir,
              "qc":qc_dir,
              "keypoints":qc_dir /"keypoints",
@@ -465,7 +465,8 @@ def make_outdirs(out_root_dir):
 
 
 def main():
-
+    tracemalloc.start()
+    st = time.time()
     #Collect arguments
     args = get_args()
     fixed_img_path=args.fixed_img
@@ -605,16 +606,12 @@ def main():
         #Write metadata in OME format into the pyramidal file
         ome_xml=ome_writer.create_ome(channel_names,moving_props_out,f"rami2d-{__version__}")
         tifff.tiffcomment(out_img_path, ome_xml.encode("utf-8"))
-
-
-if __name__ == '__main__':
-
-    tracemalloc.start()
-    st = time.time()
-
-    main()
-
+    
     print("Memory peak:",((10**(-9))*tracemalloc.get_traced_memory()[1],"GB"))
     rt = time.time() - st
     tracemalloc.stop()
     print(f"Script finished in {rt // 60:.0f}m {rt % 60:.0f}s")
+
+
+if __name__ == '__main__':
+    main()

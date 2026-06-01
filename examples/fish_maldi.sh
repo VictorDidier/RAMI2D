@@ -7,7 +7,7 @@ fixed_img="${data_dir}/fish.ome.tif"
 moving_img="${data_dir}/maldi.tif"
 
 # Example 1
-python rami2d-register \
+rami2d-register \
  -fix ${fixed_img} \
  -ifix 1 \
  -mpp-fix 5  \
@@ -24,7 +24,7 @@ python rami2d-register \
 
 moving_img_flipped="${data_dir}/maldi_flip.tif"
 
-python rami2d-register \
+rami2d-register \
  -fix ${fixed_img} \
  -ifix 1 \
  -mpp-fix 5 \

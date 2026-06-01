@@ -38,7 +38,9 @@ keywords = [
     "immunofluorescence",
     "multi-channel",
     "SIFT",
-    "RANSAC"
+    "RANSAC",
+    "itk-elastix",
+    "itk"
 ]
 
 [tool.setuptools.packages.find]

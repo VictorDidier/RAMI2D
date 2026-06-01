@@ -99,6 +99,8 @@ def get_args():
     
 
 def main():
+    tracemalloc.start()
+    st = time.time()
     # Get cli arguments 
     args=get_args()
     image_path=args.image_file_path
@@ -109,9 +111,14 @@ def main():
     suffix=args.file_name_suffix
     compression_method=args.compression_algorithm
     markers=args.markers_file
+    # validate transforsmations_dir
+    if not trf_dir.exists():
+        raise Exception(f"The transformations directory {trf_dir} does not exist")
+    elif not list(trf_dir.glob("*.txt")):
+        raise Exception(f"The transformations directory {trf_dir} does not contain any .txt transformation files")
 
     # Read transformation files
-    trf_files=sorted(list(trf_dir.glob("*")))
+    trf_files=sorted(list(trf_dir.glob("*.txt")))
     transformation_map=itk.ParameterObject.New()
     for f in trf_files:
         transformation_map.AddParameterFile(str(f))
@@ -152,14 +159,11 @@ def main():
             channel_names=[f"Channel-{ch}" for ch in range(props_out["channels"])]
         ome_xml=ome_writer.create_ome(channel_names,props_out,f"rami2d-{__version__}")
         tifff.tiffcomment(out_file_path, ome_xml.encode("utf-8"))
-
-
-if __name__ == '__main__':
-
-    tracemalloc.start()
-    st = time.time()
-    main()
     print("Memory peak:",((10**(-9))*tracemalloc.get_traced_memory()[1],"GB"))
     rt = time.time() - st
     tracemalloc.stop()
     print(f"Script finished in {rt // 60:.0f}m {rt % 60:.0f}s")
+
+
+if __name__ == '__main__':
+    main()
