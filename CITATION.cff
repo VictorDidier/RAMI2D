@@ -1,0 +1,24 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: RAMI2D (Robust Alignment of Multichannel Images in 2D)
+message: 'If you use this software, please cite it as:'
+type: software
+authors:
+  - given-names: Victor
+    family-names: Perez
+    email: vdpm85@hotmail.com
+    orcid: 'https://orcid.org/0009-0005-7909-0313'
+repository-code: 'https://github.com/VictorDidier/RAMI2D/'
+url: 'https://pypi.org/project/rami2d/'
+abstract: >-
+  A Python CLI package for the pairwise registration of
+  multiscale, multimodal, and multichannel images. It
+  leverages itk-elastix to provide rigid, affine, and
+  B‑spline registration schemes, and also offers automatic
+  alignment via keypoint-based search.
+license: BSD-3-Clause
+commit: 9ec051c8a6604598a71e1181a6e1c9146eceed30
+version: 1.0.0
+date-released: '2026-06-01'

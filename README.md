@@ -201,4 +201,4 @@ of the images at which keypoints will be searched. I found that typical values f
 from Wünnemann, F., Sicklinger, F., Bestak, K. et al. Spatial multiomics of acute myocardial infarction reveals immune cell infiltration through the endocardium. Nat Cardiovasc Res 4, 1345-1362 (2025). https://doi.org/10.1038/s44161-025-00717-y.
  
  # Acknowledgements
- This tool was developed during my time in the [SchapiroLab](https://www.schapirolab.com/) in Heidelberg – I'm grateful for the opportunity and setting that made it possible. Particular thanks to [Sebastian Gonzalez](https://github.com/sebgoti) for initial discussions on effective strategies for the registration of whole slide images.
+ This tool was developed during my last weeks at the [SchapiroLab](https://www.schapirolab.com/) in Heidelberg – I'm grateful for the opportunity and setting that made it possible. Particular thanks to [Sebastian Gonzalez](https://github.com/sebgoti) for initial discussions on effective strategies for the registration of whole slide images.
