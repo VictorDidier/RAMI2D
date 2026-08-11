@@ -7,8 +7,8 @@ import tracemalloc
 import time
 import pandas as pd
 #local scripts
-from .register import apply_transform
-from .tiff_writer import generate_tiff_pyramid
+from utils_reg import apply_transform_delayed
+from .tiff_writer import write_pyramid3
 from .processing_tools import ImageFileGateway
 from . import ome_writer
 from .version import __version__
@@ -128,7 +128,7 @@ def main():
     img_props=input_image.props
 
     # Apply transformations
-    image_transformed=apply_transform(input_image,transformation_map,is_label=is_labels)
+    image_transformed=apply_transform_delayed(input_image,transformation_map,is_label=is_labels)
 
     # Write transformed image accordingly
 
@@ -141,7 +141,7 @@ def main():
         pyramid_levels=img_props["levels"]
 
 
-    out_file_path=generate_tiff_pyramid(
+    out_file_path=write_pyramid3(
                     [image_transformed],
                     pyramid_levels,
                     output_dir,
