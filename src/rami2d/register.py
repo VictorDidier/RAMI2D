@@ -8,12 +8,13 @@ import tracemalloc
 import time
 import argparse
 import itk
+from loguru import logger
 #local scripts
 from . import utils_reg
 from . import ome_writer
 from . import initial_align
 from .processing_tools import ImageFileGateway
-from .tiff_writer import write_pyramid,write_pyramid2
+from .tiff_writer import write_pyramid,write_pyramid3
 from .version import __version__
 
 
@@ -299,6 +300,9 @@ def main():
 
     #Extract channels of fixed image and moving image channels to be used for registration.
     #Resize both fixed and moving image to have the same mpp
+    logger.info("COMMENCING RESIZING OF REFERENCE CHANNELS FOR FIXED AND MOVING IMAGES")
+    logger.info(f"FIXED IMAGE (REF-CH {fixed_ch}):\n {fixed_img_path}")
+    logger.info(f"MOVING IMAGE (REF-CH {moving_ch}):\n {moving_img_path}")
     reg_fixed_img,reg_moving_img=utils_reg.resize_and_extract_channels(Fix,Mov,fixed_ch,moving_ch,reg_mpp)
     #Save reference images in qc_dir for reference
     tifff.imwrite(outdirs["refchns"]/f"fixed_ch-{fixed_ch}.tif", reg_fixed_img,photometric="minisblack")
@@ -306,7 +310,7 @@ def main():
 
     #Calculate initial alignment
     if apply_initial_alignment:
-
+        logger.info(f"COMMENCING SEARCH/VALIDATION OF KEYPOINTS FOR INITIAL ALIGNMENT AT {key_mpp} MICRONS RESOLUTION")
         key_fixed_img,key_moving_img=utils_reg.resize_and_extract_channels(Fix,Mov,fixed_ch,moving_ch,key_mpp)
         #QC outputs
         tifff.imwrite(outdirs["keypoints"]/"fixed_keypoints.tif",key_fixed_img,photometric="minisblack")
@@ -341,6 +345,7 @@ def main():
         tifff.imwrite(init_trf_dir/"moving_init_aligned.tif",reg_moving_img,photometric="minisblack")
 
     #Extract transforms from registering with registration scheme (rigid,affine,bsplines).
+    logger.info(f"COMMENCING REGISTRATION OF REFERENCE CHANNELS AT {reg_mpp} MICRONS RESOLUTION")
     transformations_map=utils_reg.register_references(
                         reg_fixed_img,
                         reg_moving_img,
@@ -362,6 +367,7 @@ def main():
                                              )
     # Write all final transformations into the fullres_trf folder
     no_of_trf_maps=transformations_map.GetNumberOfParameterMaps()
+    logger.info(f"WRITING TRANSFORMATION FILES ON DIRECTORY:\n {outdirs['fullres_trf']}")
     transformations_map.WriteParameterFile(transformations_map.GetParameterMaps(),
                                            [str(outdirs["fullres_trf"]/f"trf_{i:02d}.txt") for i \
                                             in range(no_of_trf_maps)]
@@ -371,20 +377,10 @@ def main():
 
     if not test_mode:
         out_file_name=f'{ (moving_img_path.stem).split(".ome")[0] }_{suffix}.ome.tif'
-        """
-        out_img_path=write_pyramid(
-                    Mov,
-                    transformations_map,
-                    out_levels,
-                    output_dir,
-                    out_file_name,
-                    moving_props["data_type"],
-                    moving_props["color_type"],
-                    compression_method
-                    )
-        """
+        logger.info(f"COMMENCING WRITING OF FULL RESOLUTION REGISTERED MOVING IMAGE ON:\n {output_dir / out_file_name}")
+
         registered_mov=utils_reg.apply_transform_delayed(Mov,transformations_map)
-        out_img_path=write_pyramid2(
+        out_img_path=write_pyramid3(
                     registered_mov,
                     out_levels,
                     output_dir,

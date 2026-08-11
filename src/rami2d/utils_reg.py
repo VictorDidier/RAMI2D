@@ -189,8 +189,7 @@ def apply_transform_delayed(img_object,transform_map,in_mpp=None,is_label=False)
                              the microns_per_pixel argument(in_mpp)""")
     else:
         pass
-
-
+    
     out_mpp=float(transform_map.GetParameter(0,"Spacing")[0])
     color_interpretation=img_object.props["color_type"]
     if is_label:
