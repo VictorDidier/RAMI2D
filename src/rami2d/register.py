@@ -14,7 +14,7 @@ from . import utils_reg
 from . import ome_writer
 from . import initial_align
 from .processing_tools import ImageFileGateway
-from .tiff_writer import write_pyramid,write_pyramid3
+from .tiff_writer import write_pyramid
 from .version import __version__
 
 
@@ -377,10 +377,12 @@ def main():
 
     if not test_mode:
         out_file_name=f'{ (moving_img_path.stem).split(".ome")[0] }_{suffix}.ome.tif'
-        logger.info(f"COMMENCING WRITING OF FULL RESOLUTION REGISTERED MOVING IMAGE ON:\n {output_dir / out_file_name}")
+        logger.info(f"""COMMENCING TRANSFORMATION AND WRITING OF MOVING IMAGE ON:\n 
+        {output_dir / out_file_name}\n 
+        WITH RESOLUTION OF: {mpp_fix} MICRONS""")
 
         registered_mov=utils_reg.apply_transform_delayed(Mov,transformations_map)
-        out_img_path=write_pyramid3(
+        out_img_path=write_pyramid(
                     registered_mov,
                     out_levels,
                     output_dir,

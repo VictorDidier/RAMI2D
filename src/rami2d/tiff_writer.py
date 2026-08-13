@@ -44,13 +44,17 @@ def pyramid_generator(img_arr,levels,color_type="grayscale",down_factor=2):
             img_aux=np.rint(rescale_intensity(img_aux,out_range=val_range) ).astype(ref_dtype)
             yield img_aux
 
+
 def _pyramid_producer(delayed_img, levels, color_type, q):
     """
     Background thread target:
     Computes Dask arrays and pushes pyramid layers into the queue.
     """
     try:
-        for trf_channel in delayed_img:
+        for channel_idx, trf_channel in enumerate(delayed_img, start=1):
+            # NEW: Tell the consumer we're starting a new channel
+            q.put(('channel_start', channel_idx))
+            
             # CPU-heavy: compute the full channel
             img_arr = trf_channel.compute()
             
@@ -96,110 +100,9 @@ def validate_compression(compress):
         raise ValueError(f"Compression value {compress} not supported")
 
 
+
+
 def write_pyramid(
-                    img_file_object,
-                    transformation_map,
-                    levels,
-                    outdir,
-                    file_name,
-                    img_data_type,
-                    color_type,
-                    compress="default"
-                    ):
-
-    outdir.mkdir(parents=True, exist_ok=True)
-    out_file_path= outdir / file_name
-    tiff_compression_opts=[element.name.lower() for element in list(tifff.COMPRESSION) if not element.name.lower()=="none"]
-
-    if compress=="default":
-        output_file_compression="jpeg2000" if color_type in ("RGB","RGBA") else "lzw"
-    elif compress=="None":
-        output_file_compression=None
-    elif compress in tiff_compression_opts:
-        output_file_compression=compress
-    else:
-        raise ValueError(f"Compression value {compress} not supported")
-
-    color_interpretation=img_file_object.props["color_type"]
-    if color_interpretation=="grayscale":
-        no_of_ch=img_file_object.props["channels"]
-    elif color_interpretation in ["RGB","RGBA"]:
-        no_of_ch=1#only single page RGB images are accepted
-
-    sublayers=levels-1
-
-    with tifff.TiffWriter(out_file_path, ome=False, bigtiff=True) as tif:
-
-        for ch_index in range(no_of_ch):
-
-            pyramid_layers=pyramid_generator(
-                                            apply_transform(img_file_object,transformation_map,ch_index), 
-                                            levels,
-                                            color_type=color_interpretation
-                                            )
-            
-            for layer_index,img_layer in enumerate(pyramid_layers):
-
-                tif.write(
-                        img_layer.astype(img_data_type),
-                        description="",
-                        subfiletype=0 if layer_index==0 else 1,
-                        subifds=sublayers if layer_index==0 else None,
-                        metadata=False,  # IMPORTANT: do not write tifffile metadata here to allow adding ome later
-                        tile=(256, 256),
-                        photometric="rgb" if color_type in ("RGB","RGBA") else "minisblack",
-                        compression=output_file_compression
-                        )
-
-    return out_file_path
-
-def write_pyramid2(delayed_img,
-                    levels,
-                    outdir,
-                    file_name,
-                    img_data_type,
-                    color_type,
-                    compress="default"
-                    ):
-
-    outdir.mkdir(parents=True, exist_ok=True)
-    out_file_path= outdir / file_name
-    tiff_compression_opts=[element.name.lower() for element in list(tifff.COMPRESSION) if not element.name.lower()=="none"]
-    if compress=="default":
-        output_file_compression="jpeg2000" if color_type in ("RGB","RGBA") else "lzw"
-    elif compress=="None":
-        output_file_compression=None
-    elif compress in tiff_compression_opts:
-        output_file_compression=compress
-    else:
-        raise ValueError(f"Compression value {compress} not supported")
-
-    sublayers=levels-1
-    no_of_channels=len(delayed_img)
-    logger.info(f"TOTAL CHANNELS IN MOVING IMAGE: {no_of_channels}")
-    with tifff.TiffWriter(out_file_path, ome=False, bigtiff=True) as tif:
-
-        for current_channel,trf_channel in enumerate(delayed_img,start=1):
-            logger.info(f"WRITING: {current_channel}/{no_of_channels}")
-            pyramid_layers=pyramid_generator(trf_channel.compute(),levels,color_type)
-            
-            for layer_index,img_layer in enumerate(pyramid_layers):
-
-                tif.write(
-                        img_layer.astype(img_data_type),
-                        description="",
-                        subfiletype=0 if layer_index==0 else 1,
-                        subifds=sublayers if layer_index==0 else None,
-                        metadata=False,  # IMPORTANT: do not write tifffile metadata here to allow adding ome later
-                        tile=(256, 256),
-                        photometric="rgb" if color_type in ("RGB","RGBA") else "minisblack",
-                        compression=output_file_compression
-                        )
-
-    return out_file_path
-
-
-def write_pyramid3(
     delayed_img,
     levels,
     outdir,
@@ -226,7 +129,7 @@ def write_pyramid3(
 
     sublayers = levels - 1
     no_of_channels=len(delayed_img)
-    logger.info(f"TOTAL CHANNELS IN MOVING IMAGE: {no_of_channels}")
+    logger.info(f"TOTAL CHANNELS TO PROCESS: {no_of_channels}")
     # ----------------------------------------------------
     # 1. QUEUE-BASED PIPELINE (Speed, uses ~2× memory)
     # ----------------------------------------------------
@@ -240,7 +143,6 @@ def write_pyramid3(
         producer_thread.start()
 
         with tifff.TiffWriter(out_file_path, ome=False, bigtiff=True) as tif:
-            counter=1
             while True:
                 item = q.get()
                 msg_type = item[0]
@@ -250,8 +152,10 @@ def write_pyramid3(
                 elif msg_type == 'error':
                     # Re-raise the producer's exception in the main thread
                     raise item[1]
+                elif msg_type == 'channel_start':
+                    channel_idx = item[1]
+                    logger.info(f"WRITING CHANNEL: {channel_idx}/{no_of_channels} (PYRAMIDAL LEVELS:{levels})")
                 else:  # 'data'
-                    logger.info(f"WRITING: {counter}/{no_of_channels}")
                     _, layer_index, img_layer = item
                     _write_tiff_layer(
                         tif,
@@ -262,7 +166,6 @@ def write_pyramid3(
                         color_type,
                         output_file_compression
                     )
-                counter+=1
 
         # Wait for the producer to fully exit
         producer_thread.join(timeout=0.1)
@@ -285,5 +188,5 @@ def write_pyramid3(
                         color_type,
                         output_file_compression
                     )
-
+    logger.info(f"FINISH WRITING IMAGE WITH {no_of_channels} CHANNELS AND \n {levels} PYRAMIDAL LEVELS")
     return out_file_path

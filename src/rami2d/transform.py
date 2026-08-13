@@ -6,9 +6,10 @@ import tifffile as tifff
 import tracemalloc
 import time
 import pandas as pd
+from loguru import logger
 #local scripts
-from utils_reg import apply_transform_delayed
-from .tiff_writer import write_pyramid3
+from .utils_reg import apply_transform_delayed
+from .tiff_writer import write_pyramid
 from .processing_tools import ImageFileGateway
 from . import ome_writer
 from .version import __version__
@@ -64,6 +65,14 @@ def get_args():
                         default="transformed",
                         help='suffix to be appended to the registered output image'
                         )
+
+    parser.add_argument('-pl',
+                        '--pyramid_levels',
+                        required=False,
+                        type=int,
+                        default=8,
+                        help="number of pyramid levels in the registered output image"
+                        )
     
     parser.add_argument('-comp',
                         '--compression_algorithm',
@@ -109,6 +118,7 @@ def main():
     trf_dir=args.transformations_dir
     output_dir=args.output_dir
     suffix=args.file_name_suffix
+    levels=args.pyramid_levels
     compression_method=args.compression_algorithm
     markers=args.markers_file
     # validate transforsmations_dir
@@ -118,6 +128,7 @@ def main():
         raise Exception(f"The transformations directory {trf_dir} does not contain any .txt transformation files")
 
     # Read transformation files
+    logger.info(f"FETCHING TRANSFORMS FROM: \n {trf_dir}")
     trf_files=sorted(list(trf_dir.glob("*.txt")))
     transformation_map=itk.ParameterObject.New()
     for f in trf_files:
@@ -138,11 +149,15 @@ def main():
         compression_method="None"
     else:
         out_file_name=f'{ (image_path.stem).split(".ome")[0] }_{suffix}.ome.tif'
-        pyramid_levels=img_props["levels"]
+        #pyramid_levels=img_props["levels"]
+        pyramid_levels=levels
 
-
-    out_file_path=write_pyramid3(
-                    [image_transformed],
+    logger.info(f"""COMMENCING TRANSFORMATION AND WRITING OF MOVING IMAGE ON:\n
+        {output_dir / out_file_name}\n 
+        WITH RESOLUTION OF: {out_mpp} MICRONS""")
+    
+    out_file_path=write_pyramid(
+                    image_transformed,
                     pyramid_levels,
                     output_dir,
                     out_file_name,
