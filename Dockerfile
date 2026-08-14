@@ -10,6 +10,7 @@ RUN apt-get update -qq && apt-get install -y \
     build-essential \
     ffmpeg \
     libsm6 \
+    libgomp1 \
     libxext6 \
     procps \
     && apt-get clean \
