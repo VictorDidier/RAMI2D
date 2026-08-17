@@ -86,22 +86,6 @@ def _write_tiff_layer(tif, img_layer, layer_index, sublayers, img_data_type, col
     )
 
 
-
-def validate_compression(compress):
-    tiff_compression_opts=[element.name.lower() for element in list(tifff.COMPRESSION) if not element.name.lower()=="none"]
-
-    if compress=="default":
-        output_file_compression="jpeg2000" if color_type in ("RGB","RGBA") else "lzw"
-    elif compress=="None":
-        output_file_compression=None
-    elif compress in tiff_compression_opts:
-        output_file_compression=compress
-    else:
-        raise ValueError(f"Compression value {compress} not supported")
-
-
-
-
 def write_pyramid(
     delayed_img,
     levels,
