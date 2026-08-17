@@ -18,3 +18,4 @@ dependencies:
     - "openslide-bin==4.0.0.8"
     - "dask==2026.6.0"
     - "dask-image==2026.5.0"
+    - "loguru==0.7.3"

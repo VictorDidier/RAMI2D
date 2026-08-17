@@ -17,37 +17,36 @@ c) handling of reading and writing multichannel pyramidal images.
 - **Outputs:** a registered image saved as pyramidal ome.tif, transformation parameters as.txt files, figure with keypoints matches, low-resolution preview of registration results.
 - **Test mode:** check intermediate results in low-resolution before applying them to the full-resolution image and all its channels.
 
+
+# § Use cases
+### **Multimodal registration: H&E (moving) and immunofluorescence multichannel (fixed)**
+Registration was carried using as reference channels hematoxylin and DAPI. This example illustrates RAMI2D succeding in a complex scenario, i.e. different modalities, slightly different scales, initial misalignment of 90 degrees and different fields of view in both images. A cropped version of this data set is found in here -> [imf_he-data](https://github.com/VictorDidier/RAMI2D/tree/sample_data/data/imf_and_he)  and the parameters to run the example here -> [imf_he.sh](https://github.com/VictorDidier/RAMI2D/blob/main/examples/imf_he.sh).
+
+![he_imf](https://raw.githubusercontent.com/VictorDidier/RAMI2D/main/figs/UseCase_01_comp.jpg?raw=true)
+
+### **Transfer annotations from the moving to the fixed image**
+In this use case the transformation files are applied to the image containing the annotations originally made on the H&E image above. The tranformation was done via *ramid2d-transform*, see example here -> [imf_he.sh](https://github.com/VictorDidier/RAMI2D/blob/main/examples/imf_he.sh). The transformation files are obtained after registering the images above with *rami2d-register*.
+
+![he_annotations](https://raw.githubusercontent.com/VictorDidier/RAMI2D/main/figs/UseCase_02_comp.jpg?raw=true)
+### **Register multimodal/multiresolution data: MALDI registered to FISH image**
+An example of RAMI2D registering two images with very different resolution scales, the MALDI data has a pixel size of 15 microns while the FISH image has 1.3 microns.  A resized version of this data can be found here -> [fish_maldi-data](https://github.com/VictorDidier/RAMI2D/tree/sample_data/data/fish_and_maldi) and the parameters to run this use case are here -> [fish_maldi.sh](https://github.com/VictorDidier/RAMI2D/blob/main/examples/fish_maldi.sh).
+
+![fish_maldi](https://raw.githubusercontent.com/VictorDidier/RAMI2D/main/figs/UseCase_03.png?raw=true)
+
 # § Registration flowchart
 The flowchart below shows how the registration tool processes the images, this workflow is the usual footprint of a registration process and similarly can be found in tools like [RegisterVirtualSlices](https://github.com/fiji/register_virtual_stack_slices) or [palom](https://github.com/labsyspharm/palom).  The initial alignment via SIFT and RANSAC is a standard method firstly shown by Brown, Matthew, and David G. Lowe in  ["Recognising panoramas"](https://doi.org/10.1109/ICCV.2003.1238630).
 
 ![Flowchart](https://raw.githubusercontent.com/VictorDidier/RAMI2D/main/figs/flowchart-horizontal-annotations.png?raw=true)
 
-
-# § Use cases
-* ## Multimodal registration: H&E (moving) and immunofluorescence multichannel (fixed)
-Registration was carried using as reference channels hematoxylin and DAPI. This example illustrates RAMI2D succeding in a complex scenario, i.e. different modalities, slightly different scales, initial misalignment of 90 degrees and different fields of view in both images. A cropped version of this data set is found in here -> [imf_he-data](https://github.com/VictorDidier/RAMI2D/tree/sample_data/data/imf_and_he)  and the parameters to run the example here -> [imf_he.sh](https://github.com/VictorDidier/RAMI2D/blob/main/examples/imf_he.sh).
-
-![he_imf](https://raw.githubusercontent.com/VictorDidier/RAMI2D/main/figs/UseCase_01_comp.jpg?raw=true)
-
-* ## Transfer annotations from the moving to the fixed image
-In this use case the transformation files are applied to the image containing the annotations originally made on the H&E image above. The tranformation was done via *ramid2d-transform*, see example here -> [imf_he.sh](https://github.com/VictorDidier/RAMI2D/blob/main/examples/imf_he.sh). The transformation files are obtained after registering the images above with *rami2d-register*.
-
-![he_annotations](https://raw.githubusercontent.com/VictorDidier/RAMI2D/main/figs/UseCase_02_comp.jpg?raw=true)
-* ## Register multimodal/multiresolution data: MALDI registered to FISH image
-An example of RAMI2D registering two images with very different resolution scales, the MALDI data has a pixel size of 15 microns while the FISH image has 1.3 microns.  A resized version of this data can be found here -> [fish_maldi-data](https://github.com/VictorDidier/RAMI2D/tree/sample_data/data/fish_and_maldi) and the parameters to run this use case are here -> [fish_maldi.sh](https://github.com/VictorDidier/RAMI2D/blob/main/examples/fish_maldi.sh).
-
-![fish_maldi](https://raw.githubusercontent.com/VictorDidier/RAMI2D/main/figs/UseCase_03.png?raw=true)
-
-
 # § Quick guide
-### Terms
+### **Terms**
 - fixed image: image to register against.
 - moving image: image that will be transformed to match the structures and dimensions of the fixed image.
 - mpp: microns per pixel, i.e. pixel size in micrometers.
 - registration map: set of parameters that define how the registration between fixed and moving images will be carried out,e.g. pixel sampling, interpolation order, output bit-depth, transformation, etc.
 - transformation map: set of parameters that define one or multiple geometrical transformations (Rigid,Translation,Affine, etc.).
 
-### CLI
+### **CLI**
 RAMI2D has two cli tools, register and transform.
 1. **rami2d-register** carries out the registration as schematized in the flowchart above, its arguments are:
     - Required arguments: -fix, -mpp-fix, -ifix, -mov, -mpp-mov, -imov, -mpp-reg, -o.
@@ -57,10 +56,10 @@ RAMI2D has two cli tools, register and transform.
     - Required arguments: -i, -mpp, -tdir, -o.
     - Optional arguments: -labels, -fn, -comp, -m.
 
-### Input image files
-* both tools take any file with formats .tif, .ome.tif, or supported by [openslide](https://openslide.org/formats/).
+### **Input image files**
+* both cli tools take any file with formats .tif, .ome.tif, or supported by [openslide](https://openslide.org/formats/).
 
-### Output files
+### **Output files**
 1. For **rami2d-register** the outputs are :
     - **registered image** as pyramidal .ome.tif, the file name is that of the moving image plus the suffix *registered*.
     - **qc** directory containing three subfolders
@@ -71,11 +70,11 @@ RAMI2D has two cli tools, register and transform.
 2. For **rami2d-transform** the output is the registered image as pyramidal ome.tif. 
 
 # $ Installation via pip 
-- (1) Install, run the command:
+**1.** Install, run the command:
 ```
 pip install rami2d
 ```
-- (2) Check installation, run the --help argument to check if installation was successful:
+**2.** Check installation, run the --help argument to check if installation was successful:
 ```
 rami2d-register --help
 ```
@@ -84,7 +83,7 @@ rami2d-transform --help
 ```
 
 # § CLI description
-## <u>(a) rami2d-register</u>
+### **(a) rami2d-register**
 
 To provide a better understanding on the arguments they have been grouped below in 4 categories: 
 - fixed image
@@ -127,7 +126,7 @@ To provide a better understanding on the arguments they have been grouped below 
 | -m | Path | Path to a csv file with a column named marker_name, each row is the name of the channel in the ome metadata of the output image | NA |False|
 | -test | Boolean flag | Activate test mode to skip writting the final full resolution image, you can still check the registration results on the -mpp-reg resolution in the qc folder | NA |False|
 
-## (b) <u>rami2d-transform</u>
+### **(b) rami2d-transform**
 This CLI was designed to take the transformation maps produced by *rami2d-register*, they are found in the  *outputdir/qc/fullres_trf* folder. If you are familiar with configuring transformation maps in itk-elastix you can write your own transformation maps as a list of .txt files and use *rami2d-transform* to apply a custom transformation to your multichannel image.
 ### Required arguments
 | Argument|Type|Description|Default value|Required|
@@ -184,12 +183,12 @@ Pull the container via Singularity or Docker:
 
 **Singularity**
 ```
-singularity pull docker://ghcr.io/VictorDidier/rami2d:v1.0.0
+singularity pull docker://ghcr.io/VictorDidier/rami2d:v1.0.1
 ```
 
 **Docker**
 ```
-docker pull ghcr.io/VictorDidier/rami2d:v1.0.0
+docker pull ghcr.io/VictorDidier/rami2d:v1.0.1
 ```
 
 The script [container_usage.sh](https://github.com/VictorDidier/RAMI2D/blob/main/examples/container_usage.sh) shows execution examples using the container on the [imf_he data](https://github.com/VictorDidier/RAMI2D/tree/sample_data/data/imf_and_he).
