@@ -69,8 +69,15 @@ RAMI2D has two cli tools, register and transform.
 
 2. For **rami2d-transform** the output is the registered image as pyramidal ome.tif. 
 
-# $ Installation via pip 
-**1.** Install, run the command:
+# $ Installation via pip
+**0.** It is recommended to install rami2d inside a conda environment with python>=3.11, e.g:
+```
+conda create --name rami2d-env
+conda activate rami2d-env
+```
+
+**1.** Install by running the command:
+
 ```
 pip install rami2d
 ```
