@@ -72,7 +72,7 @@ RAMI2D has two cli tools, register and transform.
 # $ Installation via pip
 **0.** It is recommended to install rami2d inside a conda environment with python>=3.11, e.g:
 ```
-conda create --name rami2d-env
+conda create --name rami2d-env python=3.11
 conda activate rami2d-env
 ```
 
