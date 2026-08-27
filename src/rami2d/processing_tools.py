@@ -29,7 +29,7 @@ class ImageFileGateway:
     def _is_slide(self,path):
         try:
             is_slide_path=isinstance(openslide.OpenSlide( path), openslide.OpenSlide)
-            exclude_ome=[".ome.tiff",".ome.tif"]
+            exclude_ome=[".tif",".tiff",".ome.tiff",".ome.tif"]
             if any(str(path).endswith(ext) for ext in exclude_ome):
                 is_slide_path=False
         except:
@@ -82,7 +82,6 @@ class ImageFileGateway:
         down_factors=[scaling_factors[i]//scaling_factors[i-1]
                     for i in range(1,len(scaling_factors))
                 ]
-
         unique_vals, counts = np.unique(down_factors, return_counts=True)
         mode = unique_vals[np.argmax(counts)]
 
