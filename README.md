@@ -190,12 +190,12 @@ Pull the container via Singularity or Docker:
 
 **Singularity**
 ```
-singularity pull docker://ghcr.io/VictorDidier/rami2d:v1.0.1
+singularity pull docker://ghcr.io/VictorDidier/rami2d:v1.0.2
 ```
 
 **Docker**
 ```
-docker pull ghcr.io/VictorDidier/rami2d:v1.0.1
+docker pull ghcr.io/VictorDidier/rami2d:v1.0.2
 ```
 
 The script [container_usage.sh](https://github.com/VictorDidier/RAMI2D/blob/main/examples/container_usage.sh) shows execution examples using the container on the [imf_he data](https://github.com/VictorDidier/RAMI2D/tree/sample_data/data/imf_and_he).
