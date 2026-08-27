@@ -31,7 +31,10 @@ dependencies = [
     "openslide-bin==4.0.0.8",
     "dask==2026.6.0",
     "dask-image==2026.5.0",
-    "loguru==0.7.3"
+    "loguru==0.7.3",
+    "zarr==3.1.6",
+    "numcodecs==0.16.5",
+    "ome-zarr==0.18.0"
 ]
 keywords = [
     "registration",
