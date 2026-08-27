@@ -14,7 +14,7 @@ from . import utils_reg
 from . import ome_writer
 from . import initial_align
 from .processing_tools import ImageFileGateway
-from .tiff_writer import write_pyramid
+from .tiff_writer import write_pyramid,write_pyramid_omezarr,write_pyramid_omezarr_streaming
 from .version import __version__
 
 
@@ -376,7 +376,7 @@ def main():
     #Apply transformations to the moving image and upscale to the dimensions of the fixed image
 
     if not test_mode:
-        out_file_name=f'{ (moving_img_path.stem).split(".ome")[0] }_{suffix}.ome.tif'
+        out_file_name=f'{ (moving_img_path.stem).split(".ome")[0] }_{suffix}.tif'
         logger.info(f"""COMMENCING TRANSFORMATION AND WRITING OF MOVING IMAGE ON:\n 
         {output_dir / out_file_name}\n 
         WITH RESOLUTION OF: {mpp_fix} MICRONS""")
@@ -392,6 +392,7 @@ def main():
                     compression_method
                     )
         #Update moving image props after registration
+        """
         moving_props_out=ImageFileGateway(out_img_path,out_mpp).props
         if markers:
             channel_names=pd.read_csv(markers)["marker_name"].tolist()
@@ -400,6 +401,7 @@ def main():
         #Write metadata in OME format into the pyramidal file
         ome_xml=ome_writer.create_ome(channel_names,moving_props_out,f"rami2d-{__version__}")
         tifff.tiffcomment(out_img_path, ome_xml.encode("utf-8"))
+        """
     
     print("Memory peak:",((10**(-9))*tracemalloc.get_traced_memory()[1],"GB"))
     rt = time.time() - st
